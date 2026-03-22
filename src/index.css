@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme {
+  /* Design System Colors from Stitch */
+  --color-primary: #b90538;
+  --color-primary-container: #dc2c4f;
+  --color-on-primary: #ffffff;
+  --color-surface: #fff8f5;
+  --color-surface-dim: #e0d8d5;
+  --color-surface-container: #f4ece8;
+  --color-surface-container-low: #faf2ee;
+  --color-surface-container-high: #eee7e3;
+  --color-surface-container-highest: #e9e1dd;
+  --color-surface-container-lowest: #ffffff;
+  --color-on-surface: #1e1b19;
+  --color-on-surface-variant: #5b4041;
+  --color-secondary: #625d5b;
+  --color-secondary-container: #e9e1dd;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-container: #686361;
+  --color-tertiary: #555c6a;
+  --color-tertiary-container: #6e7583;
+  --color-outline: #8f6f71;
+  --color-outline-variant: #e3bdbf;
+  --color-inverse-primary: #ffb2b7;
+  --color-inverse-surface: #33302d;
+  --color-inverse-on-surface: #f7efeb;
+  --color-error: #ba1a1a;
+
+  /* Fonts matching Stitch design */
+  --font-serif: 'Noto Serif', Georgia, serif;
+  --font-sans: 'Manrope', system-ui, sans-serif;
+  --font-label: 'Inter', system-ui, sans-serif;
+}
+
+/* Base Styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
