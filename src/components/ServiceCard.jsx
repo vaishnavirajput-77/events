@@ -1,52 +1,56 @@
-import { motion } from 'framer-motion'
+import { motion } from 'framer-motion';
+import { FiPlus, FiCheck, FiHeart } from 'react-icons/fi';
+import { usePackage } from '../context/PackageContext';
+import { FALLBACK_IMAGE } from '../data/services';
+import './ServiceCard.css';
 
-function ServiceCard({ title, description, icon, image, index = 0 }) {
+export default function ServiceCard({ service, showPrice = true, showAdd = true }) {
+  const { selectedServices, addService, removeService, toggleWishlist, wishlist } = usePackage();
+  const isAdded = selectedServices.find(s => s.id === service.id);
+  const isWished = wishlist.find(w => w.id === service.id);
+
+  const handleImgError = (e) => { e.target.src = FALLBACK_IMAGE; };
+
+  const formatPrice = (p) => '₹' + p.toLocaleString('en-IN');
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      className="scard"
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group relative bg-surface-container-lowest rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-[0_12px_60px_rgba(30,27,25,0.1)] hover:-translate-y-1"
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.5 }}
     >
-      {/* Image */}
-      {image && (
-        <div className="relative h-44 sm:h-48 overflow-hidden">
-          <img
-            src={image}
-            alt={title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
-        </div>
-      )}
-
-      {/* Content */}
-      <div className="p-6 sm:p-8">
-        {/* Icon */}
-        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-primary/10 to-primary-container/10 flex items-center justify-center mb-4 sm:mb-6 transition-all duration-300 group-hover:from-primary/20 group-hover:to-primary-container/20 group-hover:scale-110">
-          <span className="material-icons-outlined text-xl sm:text-2xl text-primary">
-            {icon}
-          </span>
-        </div>
-
-        <h3 className="font-serif text-lg sm:text-xl font-semibold text-on-surface mb-2 sm:mb-3 tracking-tight">
-          {title}
-        </h3>
-        <p className="text-on-surface-variant text-sm leading-relaxed">
-          {description}
-        </p>
-
-        {/* Arrow */}
-        <div className="mt-4 sm:mt-6 flex items-center gap-1 text-primary font-label text-xs font-semibold tracking-wide uppercase opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-          Explore
-          <span className="material-icons-outlined text-base transition-transform group-hover:translate-x-1">
-            trending_flat
-          </span>
+      <div className="scard-img-wrap">
+        <img src={service.image} alt={service.name} className="scard-img" onError={handleImgError} loading="lazy" />
+        <button
+          className={`scard-wish ${isWished ? 'scard-wish--active' : ''}`}
+          onClick={() => toggleWishlist(service)}
+          aria-label="Toggle wishlist"
+        >
+          <FiHeart />
+        </button>
+      </div>
+      <div className="scard-body">
+        <h3 className="scard-name">{service.name}</h3>
+        {service.description && <p className="scard-desc">{service.description}</p>}
+        {service.items && (
+          <ul className="scard-items">
+            {service.items.map((item, i) => <li key={i}>{item}</li>)}
+          </ul>
+        )}
+        <div className="scard-footer">
+          {showPrice && <span className="scard-price price price-md">{formatPrice(service.price)}</span>}
+          {showAdd && (
+            <button
+              className={`btn ${isAdded ? 'btn-secondary' : 'btn-primary'} btn-sm`}
+              onClick={() => isAdded ? removeService(service.id) : addService(service)}
+            >
+              {isAdded ? <><FiCheck /> Added</> : <><FiPlus /> Add to Package</>}
+            </button>
+          )}
         </div>
       </div>
     </motion.div>
-  )
+  );
 }
-
-export default ServiceCard

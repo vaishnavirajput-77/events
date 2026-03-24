@@ -1,0 +1,69 @@
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-10);
+  align-items: start;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.contact-success {
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  background: #ecfdf5;
+  color: #065f46;
+  font-weight: 500;
+  margin-bottom: var(--space-4);
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.contact-info-card {
+  padding: var(--space-5);
+  border-radius: var(--radius-xl);
+  background: var(--surface-container-lowest);
+  box-shadow: var(--shadow-card);
+}
+
+.contact-info-icon {
+  font-size: 1.5rem;
+  color: var(--primary);
+  margin-bottom: var(--space-2);
+}
+
+.contact-info-card p {
+  color: var(--on-surface-variant);
+  font-size: 0.9375rem;
+}
+
+.contact-whatsapp {
+  background: #25d366;
+  color: white;
+  width: 100%;
+  border-radius: var(--radius-full);
+}
+
+.contact-whatsapp:hover {
+  background: #1da851;
+  transform: translateY(-2px);
+}
+
+.contact-map {
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+@media (max-width: 768px) {
+  .contact-layout {
+    grid-template-columns: 1fr;
+  }
+}

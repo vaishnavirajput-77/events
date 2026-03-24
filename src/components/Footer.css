@@ -1,0 +1,108 @@
+.footer {
+  background: var(--surface-container-low);
+  padding: var(--space-16) 0 var(--space-8);
+  margin-top: var(--space-20);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+  gap: var(--space-10);
+}
+
+.footer-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--on-surface);
+  margin-bottom: var(--space-4);
+}
+
+.footer-logo-icon {
+  color: var(--primary);
+}
+
+.footer-logo-pro {
+  color: var(--primary);
+  font-size: 0.75em;
+}
+
+.footer-tagline {
+  color: var(--on-surface-variant);
+  font-size: 0.9375rem;
+  margin-bottom: var(--space-6);
+  line-height: 1.6;
+}
+
+.footer-socials {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.footer-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: var(--surface-container-highest);
+  color: var(--on-surface-variant);
+  font-size: 1.125rem;
+  transition: all var(--transition-fast);
+}
+
+.footer-social:hover {
+  background: var(--primary);
+  color: var(--on-primary);
+  transform: translateY(-2px);
+}
+
+.footer-col-title {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--on-surface);
+  margin-bottom: var(--space-4);
+}
+
+.footer-link {
+  display: flex;
+  align-items: center;
+  font-size: 0.9375rem;
+  color: var(--on-surface-variant);
+  padding: var(--space-1) 0;
+  transition: color var(--transition-fast);
+}
+
+.footer-link:hover {
+  color: var(--primary);
+}
+
+.footer-bottom {
+  margin-top: var(--space-10);
+  padding-top: var(--space-6);
+  text-align: center;
+  color: var(--outline);
+  font-size: 0.8125rem;
+  border-top: 1px solid rgba(227, 189, 191, 0.2);
+}
+
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-8);
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+}

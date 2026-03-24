@@ -1,166 +1,181 @@
-import Hero from '../components/Hero'
-import Services from '../components/Services'
-import Banner from '../components/Banner'
-import PackageCard from '../components/PackageCard'
-import Trending from '../components/Trending'
-import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiArrowRight, FiStar, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import ServiceCard from '../components/ServiceCard';
+import { categories, trendingPackages, services, testimonials, FALLBACK_IMAGE } from '../data/services';
+import './Home.css';
 
-const birthdayPackages = [
-  {
-    title: 'Classic Celebration',
-    price: '₹9,999',
-    badge: 'Classic',
-    image: '/images/birthday-decor.png',
-    features: [
-      'Basic Balloon Decoration',
-      'Birthday Banner Setup',
-      'Photo Corner Arrangement',
-      'Table & Chair Decoration',
-    ],
-  },
-  {
-    title: 'Premium Party',
-    price: '₹24,999',
-    badge: 'Most Popular',
-    popular: true,
-    image: '/images/hero-bg.png',
-    features: [
-      'Theme-Based Full Decoration',
-      'LED Lighting & Backdrops',
-      'Flower & Balloon Arches',
-      'Photography Setup',
-      'Cake Table Styling',
-    ],
-  },
-  {
-    title: 'Grand Gala',
-    price: '₹49,999',
-    badge: 'Luxury',
-    image: '/images/trending-events.png',
-    features: [
-      'End-to-End Event Management',
-      'Custom Fabrication & Decor',
-      'Live Entertainment Coordination',
-      'Premium Florals & Props',
-      'Full Photography & Videography',
-    ],
-  },
-]
+const heroSlides = [
+  { image: 'https://lh3.googleusercontent.com/d/19Dnot_BIIFsZ6bEIevPfzl67Qtt271Q3=w1400', title: 'Make Your Events Magical', subtitle: 'Curating high-end digital experiences for life\'s most precious celebrations.' },
+  { image: 'https://lh3.googleusercontent.com/d/12y2Fe5RkMvmlqBCp_bWYmdGuaVWE7TSw=w1400', title: 'Luxury Celebrations', subtitle: 'From intimate anniversaries to grand weddings, we craft every detail.' },
+  { image: 'https://lh3.googleusercontent.com/d/1BnbKauymyDE2CYHXyy6a_-zeh0nFg9gJ=w1400', title: 'Unforgettable Moments', subtitle: 'Transform your vision into stunning reality with EventDhara Pro.' },
+];
 
-const weddingPackages = [
-  {
-    title: 'The Essentials',
-    price: '₹1,49,999',
-    badge: 'Essential',
-    image: '/images/wedding-decor.png',
-    features: [
-      'Day-of Coordination (10 hours)',
-      'Vendor Logistics Management',
-      'Essential Decor Setup',
-      'Guest List Management',
-    ],
-  },
-  {
-    title: 'The Signature',
-    price: '₹3,99,999',
-    badge: 'Signature',
-    popular: true,
-    image: '/images/services-collage.png',
-    features: [
-      'Full Partial Planning (6 Months)',
-      'Venue Sourcing & Curation',
-      'Floral & Aesthetic Design',
-      'Pre-Wedding Photoshoot Styling',
-      'Premium Vendor Lineup',
-    ],
-  },
-  {
-    title: 'The Legacy',
-    price: '₹9,99,999',
-    badge: 'Concierge',
-    image: '/images/trending-events.png',
-    features: [
-      'End-to-End Concierge Planning',
-      'Custom Decor Fabrication',
-      'Global Artist Coordination',
-      'Luxury Honeymoon Planning',
-      'Full Editorial Coverage',
-    ],
-  },
-]
+export default function Home() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const formatPrice = (p) => '₹' + p.toLocaleString('en-IN');
 
-function Home() {
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentSlide(s => (s + 1) % heroSlides.length), 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const nextSlide = () => setCurrentSlide(s => (s + 1) % heroSlides.length);
+  const prevSlide = () => setCurrentSlide(s => (s - 1 + heroSlides.length) % heroSlides.length);
+
+  const artisticServices = services.filter((_, i) => i < 6);
+
   return (
-    <>
-      <Hero />
-      <Services />
-      <Banner />
-
-      {/* Birthday Packages */}
-      <section className="py-16 sm:py-20 lg:py-32 bg-surface-container-low">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+    <div className="home">
+      {/* Hero Section */}
+      <section className="hero">
+        <AnimatePresence mode="wait">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-10 sm:mb-16"
+            key={currentSlide}
+            className="hero-slide"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8 }}
           >
-            <p className="font-label text-[10px] sm:text-xs font-semibold tracking-[0.2em] uppercase text-on-surface-variant mb-3 sm:mb-4">
-              Celebrations
-            </p>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-on-surface tracking-tight">
-              Birthday{' '}
-              <span className="italic text-primary">Packages</span>
-            </h2>
-            <p className="mt-4 sm:mt-6 max-w-xl mx-auto text-on-surface-variant leading-relaxed text-sm sm:text-base px-2">
-              Curated experiences for every age. From whimsical kids' themes to
-              sophisticated adult soirées.
-            </p>
+            <img src={heroSlides[currentSlide].image} alt="" className="hero-bg" onError={e => e.target.src = FALLBACK_IMAGE} />
+            <div className="hero-overlay" />
+            <div className="hero-content container">
+              <motion.p initial={{y:20,opacity:0}} animate={{y:0,opacity:1}} transition={{delay:0.2}} className="label-md hero-label">✦ The Digital Curator</motion.p>
+              <motion.h1 initial={{y:30,opacity:0}} animate={{y:0,opacity:1}} transition={{delay:0.4}} className="display-lg hero-title">{heroSlides[currentSlide].title}</motion.h1>
+              <motion.p initial={{y:20,opacity:0}} animate={{y:0,opacity:1}} transition={{delay:0.6}} className="hero-subtitle">{heroSlides[currentSlide].subtitle}</motion.p>
+              <motion.div initial={{y:20,opacity:0}} animate={{y:0,opacity:1}} transition={{delay:0.8}} className="hero-actions">
+                <Link to="/custom-builder" className="btn btn-primary btn-lg">Book Now <FiArrowRight /></Link>
+                <Link to="/services" className="btn btn-outline btn-lg" style={{color:'white', borderColor:'rgba(255,255,255,0.3)'}}>Explore Services</Link>
+              </motion.div>
+            </div>
           </motion.div>
+        </AnimatePresence>
+        <button className="hero-nav hero-nav--prev" onClick={prevSlide} aria-label="Previous"><FiChevronLeft /></button>
+        <button className="hero-nav hero-nav--next" onClick={nextSlide} aria-label="Next"><FiChevronRight /></button>
+        <div className="hero-dots">
+          {heroSlides.map((_, i) => (
+            <button key={i} className={`hero-dot ${i === currentSlide ? 'hero-dot--active' : ''}`} onClick={() => setCurrentSlide(i)} aria-label={`Slide ${i+1}`} />
+          ))}
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-            {birthdayPackages.map((pkg, index) => (
-              <PackageCard key={pkg.title} {...pkg} index={index} />
+      {/* Categories */}
+      <section className="section">
+        <div className="container">
+          <div className="section-header">
+            <p className="label-md">Curated Categories</p>
+            <h2 className="headline-lg">Every celebration deserves a unique aesthetic</h2>
+            <p>Explore our bespoke event themes crafted for perfection.</p>
+          </div>
+          <div className="categories-grid">
+            {categories.map((cat, i) => (
+              <motion.div key={cat.id} initial={{opacity:0,y:30}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{delay:i*0.1}}>
+                <Link to={`/${cat.id}`} className="cat-card">
+                  <img src={cat.image} alt={cat.name} className="cat-card-img" onError={e => e.target.src = FALLBACK_IMAGE} />
+                  <div className="cat-card-overlay" />
+                  <div className="cat-card-content">
+                    <span className="cat-card-icon">{cat.icon}</span>
+                    <h3 className="cat-card-name">{cat.name}</h3>
+                    <p className="cat-card-tagline">{cat.tagline}</p>
+                  </div>
+                </Link>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Wedding Packages */}
-      <section className="py-16 sm:py-20 lg:py-32 bg-surface">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-10 sm:mb-16"
-          >
-            <p className="font-label text-[10px] sm:text-xs font-semibold tracking-[0.2em] uppercase text-on-surface-variant mb-3 sm:mb-4">
-              Weddings
-            </p>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-on-surface tracking-tight">
-              Wedding{' '}
-              <span className="italic text-primary">Packages</span>
-            </h2>
-            <p className="mt-4 sm:mt-6 max-w-xl mx-auto text-on-surface-variant leading-relaxed text-sm sm:text-base px-2">
-              Bespoke wedding experiences designed with editorial precision. From
-              intimate elopements to grand celebrations.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-            {weddingPackages.map((pkg, index) => (
-              <PackageCard key={pkg.title} {...pkg} index={index} />
+      {/* Trending Packages */}
+      <section className="section section--alt">
+        <div className="container">
+          <div className="section-header">
+            <p className="label-md">Trending Packages</p>
+            <h2 className="headline-lg">Highly coveted collections</h2>
+            <p>Curated by our top stylists for unforgettable celebrations.</p>
+          </div>
+          <div className="trending-grid">
+            {trendingPackages.map((pkg, i) => (
+              <motion.div key={pkg.id} className="trending-card" initial={{opacity:0,y:30}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{delay:i*0.15}}>
+                <div className="trending-card-img-wrap">
+                  <img src={pkg.image} alt={pkg.name} className="trending-card-img" onError={e => e.target.src = FALLBACK_IMAGE} />
+                </div>
+                <div className="trending-card-body">
+                  <h3 className="headline-md">{pkg.name}</h3>
+                  <p className="body-md" style={{color:'var(--on-surface-variant)', marginBottom:'var(--space-4)'}}>{pkg.description}</p>
+                  <div className="trending-card-footer">
+                    <div>
+                      <p className="label-md" style={{color:'var(--on-surface-variant)'}}>Starting at</p>
+                      <p className="price price-lg">{formatPrice(pkg.price)}</p>
+                    </div>
+                    <Link to="/custom-builder" className="btn btn-primary btn-sm">Customize <FiArrowRight /></Link>
+                  </div>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      <Trending />
-    </>
-  )
+      {/* Artistic Collective (Services Preview) */}
+      <section className="section">
+        <div className="container">
+          <div className="section-header">
+            <p className="label-md">The Artistic Collective</p>
+            <h2 className="headline-lg">Premium services at your fingertips</h2>
+          </div>
+          <div className="grid grid-3">
+            {artisticServices.map(s => <ServiceCard key={s.id} service={s} />)}
+          </div>
+          <div style={{textAlign:'center', marginTop:'var(--space-10)'}}>
+            <Link to="/services" className="btn btn-secondary btn-lg">View All Services <FiArrowRight /></Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="section section--alt">
+        <div className="container">
+          <div className="section-header">
+            <p className="label-md">Loved by Our Customers</p>
+            <h2 className="headline-lg">Real celebrations, real emotions</h2>
+          </div>
+          <div className="testimonials-grid">
+            {testimonials.map((t, i) => (
+              <motion.div key={t.id} className="testimonial-card" initial={{opacity:0,y:20}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{delay:i*0.15}}>
+                <div className="testimonial-stars">
+                  {[...Array(t.rating)].map((_, j) => <FiStar key={j} className="star-filled" />)}
+                </div>
+                <p className="testimonial-text">"{t.text}"</p>
+                <div className="testimonial-author">
+                  <div className="testimonial-avatar">{t.name[0]}</div>
+                  <div>
+                    <p className="testimonial-name">{t.name}</p>
+                    <p className="testimonial-event">{t.event}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="cta-section">
+        <div className="container">
+          <motion.div className="cta-card" initial={{opacity:0,scale:0.95}} whileInView={{opacity:1,scale:1}} viewport={{once:true}}>
+            <h2 className="headline-lg" style={{color:'white'}}>Ready to curate your next gala?</h2>
+            <p style={{color:'rgba(255,255,255,0.85)', maxWidth:500, margin:'var(--space-4) auto var(--space-8)'}}>
+              Join 500+ couples and companies who trust EventDhara Pro for their most important moments.
+            </p>
+            <div style={{display:'flex', gap:'var(--space-4)', justifyContent:'center', flexWrap:'wrap'}}>
+              <Link to="/custom-builder" className="btn btn-lg" style={{background:'white', color:'var(--primary)'}}>Start Building <FiArrowRight /></Link>
+              <Link to="/contact" className="btn btn-lg" style={{background:'transparent', color:'white', border:'1.5px solid rgba(255,255,255,0.4)'}}>Contact Us</Link>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+    </div>
+  );
 }
-
-export default Home
